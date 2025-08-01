@@ -10,6 +10,9 @@ import { CognitoIdentityProviderClient, AdminCreateUserCommand, AdminSetUserPass
 import { GlobalSignOutCommand } from '@aws-sdk/client-cognito-identity-provider';
 import * as crypto from 'crypto';
 
+// 회원가입은 userService 로 빼자. 
+// 기능 설명할 때, 회원 이 붙으면 유저 
+// 로그인 / 로그아웃 / 토큰 검증 인증인가 관련은 auth 
 
 
 @Injectable()
@@ -44,6 +47,9 @@ export class AuthService {
       MessageAction: 'SUPPRESS',
     }));
 
+    console.log('createdResponse : : : :', createdResponse.User?.Attributes);
+
+
 
     if (createdResponse.$metadata.httpStatusCode === 200) {
 
@@ -53,16 +59,15 @@ export class AuthService {
 
         await client.send(new AdminSetUserPasswordCommand({
           UserPoolId: process.env.COGNITO_USER_POOL_ID,
-          Username: data.name,
+          Username: data.name, // 이메일로 변경. 
           Password: data.password,
           Permanent: true,
         }));
       }
 
       // DB 저장
-      const newUser = this.userRepository.create(data);
+      const newUser = this.userRepository.create(data);  // sub 값을 db 의 tb_user 테이블의 id값으로 매핑한다. 
       return await this.userRepository.save(newUser);
-
     } else {
       throw new BadRequestException('Failed to create user in Cognito');
     }
@@ -130,61 +135,9 @@ export class AuthService {
     }
   }
 
-
-
-
-  // async loginWithCredentials(email: string, password: string, ip: string, userAgent: string) {
-
-
-  //   const client = new CognitoIdentityProviderClient({ region: process.env.COGNITO_REGION });
-  //   if (!email || !password) {
-  //     throw new BadRequestException('Email and password are required');
-  //   }
-
-  //   const user = await this.userRepository.findOne({ where: { email } });
-  //   if (!user) {
-  //     throw new UnauthorizedException('User not found');
-  //   }
-
-
-  //   function generateSecretHash(username: string, clientId: string, clientSecret: string): string {
-  //     return crypto
-  //       .createHmac('SHA256', clientSecret)
-  //       .update(username + clientId)
-  //       .digest('base64');
-  //   }
-
-
-  //   const secretHash = generateSecretHash(user.name, process.env.COGNITO_CLIENT_ID ?? "g77md7od62ilsvkrd0qb6jbno", process.env.COGNITO_CLIENT_SECRET ?? "qb0fjh49n6tfih6t5dnj2o4sl8ghrjudk35p33gtaj9q6cv0h5f");
-  //   // const hashedPassword = await utils.hashPassword(password);
-  //   console.log(email, password, ip, userAgent);
-
-  //   const response = await client.send(new AdminInitiateAuthCommand({
-  //     UserPoolId: process.env.COGNITO_USER_POOL_ID,
-  //     ClientId: process.env.COGNITO_CLIENT_ID,
-  //     AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-  //     AuthParameters: { USERNAME: user.name, PASSWORD: password, SECRET_HASH: secretHash },
-  //   }));
-
-  //   const token = response.AuthenticationResult?.IdToken;
-  //   if (!token) throw new UnauthorizedException('Invalid login');
-
-  //   if (!user) throw new UnauthorizedException('User not found');
-
-  //   await this.loginService.saveLoginHistory({
-  //     user_id: user.id,
-  //     access_token: token,
-  //     ip_address: ip,
-  //     user_agent: userAgent,
-  //     login_type: 'cognito',
-  //     success: true,
-  //     fail_reason: '',
-  //   });
-
-  //   return { token, user };
-  // }
-
-
+  // cognito 에 password 를 저장 안하면, 같이 쓸수있다. 
+  // cognito 에 password 속성을 쓰게 되면, 소셜로그인은 password 가 없어서, 같이 못쓴다. 
+  // email 
 
   async loginWithCredentials(email: string, password: string, ip: string, userAgent: string) {
     const client = new CognitoIdentityProviderClient({ region: process.env.COGNITO_REGION });

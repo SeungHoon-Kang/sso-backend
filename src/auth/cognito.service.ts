@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import jwksClient from 'jwks-rsa';
 import * as jwt from 'jsonwebtoken';
 import Redis from 'ioredis';
-import { CacheService } from '../valkey/cache.service';
+import { CacheService } from '../../libs/cache/src/cache.service';
 
 @Injectable()
 export class CognitoService {

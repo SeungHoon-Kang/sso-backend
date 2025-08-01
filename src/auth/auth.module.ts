@@ -6,7 +6,7 @@ import { User } from '../entities/user.entity';
 import { LoginHist } from '../entities/login-hist.entity';
 import { CognitoService } from './cognito.service';
 import { LoginService } from '../login/login.service';
-import { CacheModule } from 'src/valkey/cache.module';
+import { CacheModule } from '../../libs/cache/src/cache.module'; // CacheModule import
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, LoginHist]), CacheModule],

@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'loword', name: 'tb_user' })
+@Entity({ schema: 'loword', name: 'tb_user' }) // public schema로 변경
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

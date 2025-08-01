@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'loword', name: 'tb_login_hist' })
+@Entity({ schema: 'loword', name: 'tb_login_hist' }) // public schema로 변경
 export class LoginHist {
   @PrimaryGeneratedColumn()
   id: number;
