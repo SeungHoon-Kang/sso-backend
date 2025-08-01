@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { User } from '../entities/user.entity';
 import { LoginHist } from '../entities/login-hist.entity';
 import { CognitoService } from './cognito.service';
-import { LoginService } from '../login/login.service';
+import { LoginService } from './login.service';
 import { CacheModule } from '../../libs/cache/src/cache.module'; // CacheModule import
 
 @Module({

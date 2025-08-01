@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 // import { LoginHist } from '../entities/login-hist.entity';
 import { CognitoService } from './cognito.service';
-import { LoginService } from '../login/login.service';
+import { LoginService } from './login.service';
 // import * as bcrypt from 'bcrypt';
 import { CognitoIdentityProviderClient, AdminCreateUserCommand, AdminSetUserPasswordCommand, AdminInitiateAuthCommand, InitiateAuthCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { GlobalSignOutCommand } from '@aws-sdk/client-cognito-identity-provider';
@@ -42,7 +42,6 @@ export class AuthService {
       Username: data.name, // 이메일 ID 부분만 username으로 사용
       UserAttributes: [
         { Name: 'email', Value: data.email },
-        { Name: 'name', Value: data.name },
       ],
       MessageAction: 'SUPPRESS',
     }));

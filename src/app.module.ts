@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import { LoginHist } from './entities/login-hist.entity';
 import { UserRole } from './entities/user-role.entity';
 import { AuthModule } from './auth/auth.module';
-import { Login2Module } from './login2/login2.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { Login2Module } from './login2/login2.module';
       }),
     }),
     AuthModule,
-    Login2Module,
   ],
 })
 export class AppModule { }
